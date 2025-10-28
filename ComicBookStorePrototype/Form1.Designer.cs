@@ -1,6 +1,6 @@
 ﻿namespace ComicBookStorePrototype
 {
-    partial class Form1
+    partial class ComicsForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -28,12 +28,47 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            ComicGridView = new DataGridView();
+            SearchText = new TextBox();
+            ((System.ComponentModel.ISupportInitialize)ComicGridView).BeginInit();
+            SuspendLayout();
+            // 
+            // ComicGridView
+            // 
+            ComicGridView.AllowUserToOrderColumns = true;
+            ComicGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            ComicGridView.Location = new Point(12, 63);
+            ComicGridView.Name = "ComicGridView";
+            ComicGridView.RowHeadersWidth = 62;
+            ComicGridView.Size = new Size(1169, 394);
+            ComicGridView.TabIndex = 0;
+            // 
+            // SearchText
+            // 
+            SearchText.Location = new Point(29, 19);
+            SearchText.Name = "SearchText";
+            SearchText.Size = new Size(327, 31);
+            SearchText.TabIndex = 1;
+            SearchText.TextChanged += SearchText_TextChanged;
+            // 
+            // ComicsForm
+            // 
+            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1193, 483);
+            Controls.Add(SearchText);
+            Controls.Add(ComicGridView);
+            Name = "ComicsForm";
+            Text = "Form1";
+            Load += ComicsForm_Load;
+            ((System.ComponentModel.ISupportInitialize)ComicGridView).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
+
+        private DataGridView ComicGridView;
+        private TextBox SearchText;
     }
 }
