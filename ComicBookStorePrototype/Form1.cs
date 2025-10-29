@@ -18,6 +18,20 @@ namespace ComicBookStorePrototype
         private void ComicsForm_Load(object sender, EventArgs e)
         {
             _comic = Data.CSVDataLoader.LoadData();
+
+            var genres = _comic
+                .Where(c => !string.IsNullOrEmpty(c.Genre))
+                .SelectMany(g => g.Genre.Split(','))
+                .Select(g => g.Trim())
+                .Where(g => g.Length > 0)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(g => g)
+                .ToList();
+
+            GenreFilterCBox.DataSource = genres;
+            GenreFilterCBox.SelectedIndex = -1; // optional, start with nothing selected
+
+
             ComicGridView.DataSource = _comic;
             RefreshGrid();
         }
@@ -54,6 +68,21 @@ namespace ComicBookStorePrototype
             ComicGridView.DataSource = searchResult;
         }
 
-        
+        private void GenreFilterCBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (GenreFilterCBox.SelectedItem == null)
+            {
+                RefreshGrid();
+                return;
+            }
+
+            string selectedGenre = GenreFilterCBox.SelectedItem.ToString();
+
+            var filtred = _comic
+                .Where(c => !string.IsNullOrEmpty(c.Genre) && c.Genre.Contains(selectedGenre, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            ComicGridView.DataSource = filtred;
+        }
     }
 }

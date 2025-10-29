@@ -30,6 +30,7 @@
         {
             ComicGridView = new DataGridView();
             SearchText = new TextBox();
+            GenreFilterCBox = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)ComicGridView).BeginInit();
             SuspendLayout();
             // 
@@ -51,11 +52,22 @@
             SearchText.TabIndex = 1;
             SearchText.TextChanged += SearchText_TextChanged;
             // 
+            // GenreFilterCBox
+            // 
+            GenreFilterCBox.BackColor = SystemColors.ScrollBar;
+            GenreFilterCBox.FormattingEnabled = true;
+            GenreFilterCBox.Location = new Point(425, 19);
+            GenreFilterCBox.Name = "GenreFilterCBox";
+            GenreFilterCBox.Size = new Size(654, 33);
+            GenreFilterCBox.TabIndex = 2;
+            GenreFilterCBox.SelectedIndexChanged += GenreFilterCBox_SelectedIndexChanged;
+            // 
             // ComicsForm
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1193, 483);
+            Controls.Add(GenreFilterCBox);
             Controls.Add(SearchText);
             Controls.Add(ComicGridView);
             Name = "ComicsForm";
@@ -70,5 +82,6 @@
 
         private DataGridView ComicGridView;
         private TextBox SearchText;
+        private ComboBox GenreFilterCBox;
     }
 }
