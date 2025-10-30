@@ -28,8 +28,33 @@ namespace ComicBookStorePrototype
                 .OrderBy(g => g)
                 .ToList();
 
+            var Name = _comic
+                .Where(c => !string.IsNullOrEmpty(c.Name))
+                .SelectMany(g => g.Name.Split(','))
+                .Select(g => g.Trim())
+                .Where(g => g.Length > 0)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(g => g)
+                .ToList();
+
+
+            SortByFilterComboBox.Items.AddRange(new string[]
+            {
+                "Name",
+                "Year of Publication",
+            });
+            SortByFilterComboBox.SelectedIndex = 1;
+
+            SortOrderComboBox.Items.AddRange(new string[]
+            {
+                "Ascending",
+                "Descending",
+            });
+            SortOrderComboBox.SelectedIndex = 1;
+
+
             GenreFilterCBox.DataSource = genres;
-            GenreFilterCBox.SelectedIndex = -1; // optional, start with nothing selected
+            GenreFilterCBox.SelectedIndex = 1; // optional, start with nothing selected
 
 
             ComicGridView.DataSource = _comic;
@@ -70,19 +95,69 @@ namespace ComicBookStorePrototype
 
         private void GenreFilterCBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (GenreFilterCBox.SelectedItem == null)
+            //if (GenreFilterCBox.SelectedItem == null)
+            //{
+            //    RefreshGrid();
+            //    return;
+            //}
+
+            //string selectedGenre = GenreFilterCBox.SelectedItem.ToString();
+
+            //var filtred = _comic
+            //    .Where(c => !string.IsNullOrEmpty(c.Genre) && c.Genre.Contains(selectedGenre, StringComparison.OrdinalIgnoreCase))
+            //    .ToList();
+
+            //ComicGridView.DataSource = filtred;
+
+            UpdateFilterResult();
+        }
+
+        private void SortByFilterComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateFilterResult();
+        }
+
+        private void SortOrderComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateFilterResult();
+        }
+
+        private void UpdateFilterResult()
+        {
+            if (_comic == null || _comic.Count == 0)
             {
                 RefreshGrid();
                 return;
             }
 
-            string selectedGenre = GenreFilterCBox.SelectedItem.ToString();
+            string selectedGenre = GenreFilterCBox.SelectedItem?.ToString();
+            string sortBy = SortByFilterComboBox.SelectedItem?.ToString();
+            string sortOrder = SortOrderComboBox.SelectedItem?.ToString();
 
-            var filtred = _comic
-                .Where(c => !string.IsNullOrEmpty(c.Genre) && c.Genre.Contains(selectedGenre, StringComparison.OrdinalIgnoreCase))
-                .ToList();
+            IEnumerable<Comics> filterComics = _comic;
 
-            ComicGridView.DataSource = filtred;
+            if(!string.IsNullOrEmpty(selectedGenre) && selectedGenre != "Show All")
+            {
+                filterComics = filterComics
+                    .Where(c => !string.IsNullOrEmpty(c.Genre) && c.Genre.Contains(selectedGenre, StringComparison.OrdinalIgnoreCase));
+            }
+
+            bool decending = sortOrder == "Descending";
+
+            filterComics = sortBy switch
+            {
+                "Name" => decending
+                    ? filterComics.OrderByDescending(c => c.Name)
+                    : filterComics.OrderBy(c => c.Name),
+
+                "Year of Publication" => decending
+                    ? filterComics.OrderByDescending(c => c.DateOfPublication)
+                    : filterComics.OrderBy(c => c.DateOfPublication),
+                _ => filterComics
+
+            };
+
+            ComicGridView.DataSource = filterComics.ToList();
         }
     }
 }
