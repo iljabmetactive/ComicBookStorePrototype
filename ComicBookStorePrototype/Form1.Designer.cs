@@ -48,6 +48,7 @@
             ComicGridView.RowHeadersWidth = 62;
             ComicGridView.Size = new Size(1079, 559);
             ComicGridView.TabIndex = 0;
+            ComicGridView.CellFormatting += ComicGridView_CellFormatting;
             // 
             // SearchText
             // 

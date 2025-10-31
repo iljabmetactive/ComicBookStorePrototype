@@ -58,6 +58,7 @@ namespace ComicBookStorePrototype
 
 
             ComicGridView.DataSource = _comic;
+
             RefreshGrid();
         }
 
@@ -136,7 +137,7 @@ namespace ComicBookStorePrototype
 
             IEnumerable<Comics> filterComics = _comic;
 
-            if(!string.IsNullOrEmpty(selectedGenre) && selectedGenre != "Show All")
+            if (!string.IsNullOrEmpty(selectedGenre) && selectedGenre != "Show All")
             {
                 filterComics = filterComics
                     .Where(c => !string.IsNullOrEmpty(c.Genre) && c.Genre.Contains(selectedGenre, StringComparison.OrdinalIgnoreCase));
@@ -158,6 +159,17 @@ namespace ComicBookStorePrototype
             };
 
             ComicGridView.DataSource = filterComics.ToList();
+        }
+
+
+
+        private void ComicGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.Value == null || string.IsNullOrWhiteSpace(e.Value.ToString()))
+            {
+                e.Value = "Unknown";
+                e.FormattingApplied = true;
+            }
         }
     }
 }
