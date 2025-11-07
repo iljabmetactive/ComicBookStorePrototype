@@ -36,6 +36,7 @@
             AuthorTextBox = new TextBox();
             SortOrderTextBox = new TextBox();
             SortOrderComboBox = new ComboBox();
+            toggleColumnVisibilityBtn = new Button();
             ((System.ComponentModel.ISupportInitialize)ComicGridView).BeginInit();
             SuspendLayout();
             // 
@@ -112,11 +113,22 @@
             SortOrderComboBox.TabIndex = 7;
             SortOrderComboBox.SelectedIndexChanged += SortOrderComboBox_SelectedIndexChanged;
             // 
+            // toggleColumnVisibilityBtn
+            // 
+            toggleColumnVisibilityBtn.Location = new Point(1116, 264);
+            toggleColumnVisibilityBtn.Name = "toggleColumnVisibilityBtn";
+            toggleColumnVisibilityBtn.Size = new Size(243, 51);
+            toggleColumnVisibilityBtn.TabIndex = 9;
+            toggleColumnVisibilityBtn.Text = "Toggle Shown Information";
+            toggleColumnVisibilityBtn.UseVisualStyleBackColor = true;
+            toggleColumnVisibilityBtn.Click += toggleColumnVisibilityBtn_Click;
+            // 
             // ComicsForm
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1422, 654);
+            Controls.Add(toggleColumnVisibilityBtn);
             Controls.Add(SortOrderComboBox);
             Controls.Add(SortOrderTextBox);
             Controls.Add(AuthorTextBox);
@@ -143,5 +155,6 @@
         private TextBox AuthorTextBox;
         private TextBox SortOrderTextBox;
         private ComboBox SortOrderComboBox;
+        private Button toggleColumnVisibilityBtn;
     }
 }

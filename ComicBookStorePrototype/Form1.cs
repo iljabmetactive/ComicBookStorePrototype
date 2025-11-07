@@ -6,6 +6,12 @@ using System.Windows.Forms.DataVisualization.Charting;
 
 namespace ComicBookStorePrototype
 {
+    /// <summary>
+    ///Last thing that needs doing is adding a collum system that shows the first 5 collums and data within them and allowing the user to
+    ///click a button that shows the rest of the collums as needed.
+    ///after that you can work on refactoring the code to follow SOLID principles.
+    ///
+    /// </summary>
     public partial class ComicsForm : Form
     {
         public ComicsForm()
@@ -43,21 +49,26 @@ namespace ComicBookStorePrototype
                 "Name",
                 "Year of Publication",
             });
-            SortByFilterComboBox.SelectedIndex = 1;
+            SortByFilterComboBox.SelectedIndex = 0;
 
             SortOrderComboBox.Items.AddRange(new string[]
             {
                 "Ascending",
                 "Descending",
             });
-            SortOrderComboBox.SelectedIndex = 1;
+            SortOrderComboBox.SelectedIndex = 0;
 
 
             GenreFilterCBox.DataSource = genres;
-            GenreFilterCBox.SelectedIndex = 1; // optional, start with nothing selected
-
+            GenreFilterCBox.SelectedIndex = 0; // optional, start with nothing selected
 
             ComicGridView.DataSource = _comic;
+
+            
+
+            ComicGridView.AutoGenerateColumns = true;
+
+            ComicGridColumRowFilter();
 
             RefreshGrid();
         }
@@ -170,6 +181,43 @@ namespace ComicBookStorePrototype
                 e.Value = "Unknown";
                 e.FormattingApplied = true;
             }
+        }
+
+        private void ComicGridColumRowFilter()
+        {
+            foreach (DataGridViewColumn column in ComicGridView.Columns)
+            {
+                column.Visible = false;
+            }
+            toggleColumnVisibilityBtn.Text = "Show More Columns";
+            ComicGridView.Columns["Title"].Visible = true;
+            ComicGridView.Columns["Name"].Visible = true;
+            ComicGridView.Columns["ContentType"].Visible = true;
+            ComicGridView.Columns["Publisher"].Visible = true;
+            ComicGridView.Columns["Genre"].Visible = true;
+
+        }
+
+        bool areAllColumnsVisible = false;
+        private void toggleColumnVisibilityBtn_Click(object sender, EventArgs e)
+        {
+            
+            if(!areAllColumnsVisible)
+            {
+                foreach (DataGridViewColumn column in ComicGridView.Columns)
+                {
+                    column.Visible = true;
+                }
+                toggleColumnVisibilityBtn.Text = "Show Less Columns";
+                areAllColumnsVisible = true;
+            }
+            else
+            {
+                ComicGridColumRowFilter();
+                toggleColumnVisibilityBtn.Text = "Show All Columns";
+                areAllColumnsVisible = false;
+            }
+
         }
     }
 }
