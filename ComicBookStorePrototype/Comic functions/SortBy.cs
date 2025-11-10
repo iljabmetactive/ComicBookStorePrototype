@@ -7,10 +7,7 @@ using System.Threading.Tasks;
 
 namespace ComicBookStorePrototype.Comic_functions
 {
-    public interface IComicSortBy
-    {
-        IEnumerable<Comics> SortAssendOrDescend(IEnumerable<Comics> comics, bool descending);
-    }
+    
 
     public class SortByName : IComicSortBy
     {

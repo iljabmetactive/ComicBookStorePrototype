@@ -24,7 +24,7 @@ namespace ComicBookStorePrototype
 
         private void ComicsForm_Load(object sender, EventArgs e)
         {
-            _comic = Data.CSVDataLoader.LoadData();
+            _comic = new CSVDataLoader().LoadData();
 
             var genres = _comic
                 .Where(c => !string.IsNullOrEmpty(c.Genre))

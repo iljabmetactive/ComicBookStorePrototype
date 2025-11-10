@@ -1,4 +1,5 @@
-﻿using CsvHelper;
+﻿using ComicBookStorePrototype.Comic_functions;
+using CsvHelper;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -10,27 +11,31 @@ using System.Windows.Forms;
 
 namespace ComicBookStorePrototype.Data
 {
-    public static class CSVDataLoader
+    public class CSVDataLoader : IComicLoad
     {
-            private static string datasetPath = Path.Combine(
-                Application.StartupPath,
-                "Data",
-                "names.csv"
-            );
-            private const int dataLimit = 100000;
+        private static string datasetPath = Path.Combine(
+            Application.StartupPath,
+            "Data",
+            "names.csv"
+        );
+        private const int dataLimit = 100000;
 
-            public static List<Comics> LoadData()
-            {
-                using (var reader = new StreamReader(datasetPath))
-                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-                {
-                    csv.Context.RegisterClassMap<ComicMap>();
+        // Implement the instance method required by IComicLoad
+        public List<Comics> LoadData()
+        {
+            using var reader = new StreamReader(datasetPath);
+            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+            csv.Context.RegisterClassMap<ComicMap>();
+            return csv.GetRecords<Comics>().Take(dataLimit).ToList();
+        }
 
-                    var products = csv.GetRecords<Comics>().Take(dataLimit).ToList();
-
-                    return products;
-                }
-            }
-
+        // Retain the static method if needed elsewhere
+        public static List<Comics> LoadDataStatic()
+        {
+            using var reader = new StreamReader(datasetPath);
+            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+            csv.Context.RegisterClassMap<ComicMap>();
+            return csv.GetRecords<Comics>().Take(dataLimit).ToList();
+        }
     }
 }
