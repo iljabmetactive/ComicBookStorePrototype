@@ -1,3 +1,4 @@
+using ComicBookStorePrototype.Comic_functions;
 using ComicBookStorePrototype.Data;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -64,7 +65,7 @@ namespace ComicBookStorePrototype
 
             ComicGridView.DataSource = _comic;
 
-            
+
 
             ComicGridView.AutoGenerateColumns = true;
 
@@ -121,56 +122,68 @@ namespace ComicBookStorePrototype
 
             //ComicGridView.DataSource = filtred;
 
-            UpdateFilterResult();
+            UpdateFilter();
         }
 
         private void SortByFilterComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            UpdateFilterResult();
+            UpdateFilter();
         }
 
         private void SortOrderComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            UpdateFilterResult();
+            UpdateFilter();
         }
 
-        private void UpdateFilterResult()
+        private void UpdateFilter()
         {
-            if (_comic == null || _comic.Count == 0)
-            {
-                RefreshGrid();
-                return;
-            }
+            var filtered = comicFilters.FilterByGenre(_comic, GenreFilterCBox.SelectedItem?.ToString() ?? string.Empty);
+            var sorted = comicFilters.SortComics(
+                filtered,
+                SortByFilterComboBox.SelectedItem?.ToString() ?? string.Empty,
+                SortOrderComboBox.SelectedItem?.ToString() == "Descending"
+            );
 
-            string selectedGenre = GenreFilterCBox.SelectedItem?.ToString();
-            string sortBy = SortByFilterComboBox.SelectedItem?.ToString();
-            string sortOrder = SortOrderComboBox.SelectedItem?.ToString();
-
-            IEnumerable<Comics> filterComics = _comic;
-
-            if (!string.IsNullOrEmpty(selectedGenre) && selectedGenre != "Show All")
-            {
-                filterComics = filterComics
-                    .Where(c => !string.IsNullOrEmpty(c.Genre) && c.Genre.Contains(selectedGenre, StringComparison.OrdinalIgnoreCase));
-            }
-
-            bool decending = sortOrder == "Descending";
-
-            filterComics = sortBy switch
-            {
-                "Name" => decending
-                    ? filterComics.OrderByDescending(c => c.Name)
-                    : filterComics.OrderBy(c => c.Name),
-
-                "Year of Publication" => decending
-                    ? filterComics.OrderByDescending(c => c.DateOfPublication)
-                    : filterComics.OrderBy(c => c.DateOfPublication),
-                _ => filterComics
-
-            };
-
-            ComicGridView.DataSource = filterComics.ToList();
+            ComicGridView.DataSource = sorted.ToList();
         }
+
+        //private void UpdateFilterResult()
+        //{
+        //    if (_comic == null || _comic.Count == 0)
+        //    {
+        //        RefreshGrid();
+        //        return;
+        //    }
+
+        //    string selectedGenre = GenreFilterCBox.SelectedItem?.ToString();
+        //    string sortBy = SortByFilterComboBox.SelectedItem?.ToString();
+        //    string sortOrder = SortOrderComboBox.SelectedItem?.ToString();
+
+        //    IEnumerable<Comics> filterComics = _comic;
+
+        //    if (!string.IsNullOrEmpty(selectedGenre) && selectedGenre != "Show All")
+        //    {
+        //        filterComics = filterComics
+        //            .Where(c => !string.IsNullOrEmpty(c.Genre) && c.Genre.Contains(selectedGenre, StringComparison.OrdinalIgnoreCase));
+        //    }
+
+        //    bool decending = sortOrder == "Descending";
+
+        //    filterComics = sortBy switch
+        //    {
+        //        "Name" => decending
+        //            ? filterComics.OrderByDescending(c => c.Name)
+        //            : filterComics.OrderBy(c => c.Name),
+
+        //        "Year of Publication" => decending
+        //            ? filterComics.OrderByDescending(c => c.DateOfPublication)
+        //            : filterComics.OrderBy(c => c.DateOfPublication),
+        //        _ => filterComics
+
+        //    };
+
+        //    ComicGridView.DataSource = filterComics.ToList();
+        //}
 
 
 
@@ -192,17 +205,18 @@ namespace ComicBookStorePrototype
             toggleColumnVisibilityBtn.Text = "Show More Columns";
             ComicGridView.Columns["Title"].Visible = true;
             ComicGridView.Columns["Name"].Visible = true;
-            ComicGridView.Columns["ContentType"].Visible = true;
             ComicGridView.Columns["Publisher"].Visible = true;
             ComicGridView.Columns["Genre"].Visible = true;
+            ComicGridView.Columns["DateOfPublication"].Visible = true;
+            ComicGridView.Columns["otherNames"].Visible = true;
 
         }
 
         bool areAllColumnsVisible = false;
         private void toggleColumnVisibilityBtn_Click(object sender, EventArgs e)
         {
-            
-            if(!areAllColumnsVisible)
+
+            if (!areAllColumnsVisible)
             {
                 foreach (DataGridViewColumn column in ComicGridView.Columns)
                 {
@@ -219,5 +233,8 @@ namespace ComicBookStorePrototype
             }
 
         }
+
+        private ComicFilters comicFilters = new ComicFilters();
+
     }
 }
