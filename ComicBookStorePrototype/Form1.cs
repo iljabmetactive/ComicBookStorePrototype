@@ -135,14 +135,17 @@ namespace ComicBookStorePrototype
             UpdateFilter();
         }
 
+        private ComicFilters comicFilters = new ComicFilters();
+        private SortBy sortBy = new SortBy();
         private void UpdateFilter()
         {
             var filtered = comicFilters.FilterByGenre(_comic, GenreFilterCBox.SelectedItem?.ToString() ?? string.Empty);
-            var sorted = comicFilters.SortComics(
-                filtered,
-                SortByFilterComboBox.SelectedItem?.ToString() ?? string.Empty,
-                SortOrderComboBox.SelectedItem?.ToString() == "Descending"
-            );
+            var sorted = sortBy
+                .GetStrategy(SortByFilterComboBox.SelectedItem?.ToString() ?? string.Empty)
+                .SortAssendOrDescend(
+                    filtered,
+                    SortOrderComboBox.SelectedItem?.ToString() == "Descending"
+                );
 
             ComicGridView.DataSource = sorted.ToList();
         }
@@ -234,7 +237,7 @@ namespace ComicBookStorePrototype
 
         }
 
-        private ComicFilters comicFilters = new ComicFilters();
+        
 
     }
 }

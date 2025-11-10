@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace ComicBookStorePrototype.Comic_functions
 {
+  
     public class ComicFilters
     {
         public IEnumerable<Comics> FilterByGenre(IEnumerable<Comics> comics, string genre)
@@ -19,18 +20,21 @@ namespace ComicBookStorePrototype.Comic_functions
 
         }
 
-        public IEnumerable<Comics> SortComics(IEnumerable<Comics> comics, string sortBy, bool descending)
-        {
-            return sortBy switch
-            {
-                "Name" => descending
-                    ? comics.OrderByDescending(c => c.Name)
-                    : comics.OrderBy(c => c.Name),
-                "Year of Publication" => descending
-                    ? comics.OrderByDescending(c => c.DateOfPublication)
-                    : comics.OrderBy(c => c.DateOfPublication),
-                _ => comics
-            };
-        }
+        
+
+
+        //public IEnumerable<Comics> SortComics(IEnumerable<Comics> comics, string sortBy, bool descending)
+        //{
+        //    return sortBy switch
+        //    {
+        //        "Name" => descending
+        //            ? comics.OrderByDescending(c => c.Name)
+        //            : comics.OrderBy(c => c.Name),
+        //        "Year of Publication" => descending
+        //            ? comics.OrderByDescending(c => c.DateOfPublication)
+        //            : comics.OrderBy(c => c.DateOfPublication),
+        //        _ => comics
+        //    };
+        //}
     }
 }
