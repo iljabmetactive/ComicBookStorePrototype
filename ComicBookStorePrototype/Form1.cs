@@ -15,8 +15,11 @@ namespace ComicBookStorePrototype
     /// </summary>
     public partial class ComicsForm : Form
     {
-        public ComicsForm()
+        private readonly IComicLoad _repository;
+
+        public ComicsForm(IComicLoad repository)
         {
+            _repository = repository;
             InitializeComponent();
         }
 
@@ -24,7 +27,8 @@ namespace ComicBookStorePrototype
 
         private void ComicsForm_Load(object sender, EventArgs e)
         {
-            _comic = new CSVDataLoader().LoadData();
+            _comic = _repository.LoadData();
+
 
             var genres = _comic
                 .Where(c => !string.IsNullOrEmpty(c.Genre))

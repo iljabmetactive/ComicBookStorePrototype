@@ -1,3 +1,5 @@
+using ComicBookStorePrototype.Data;
+
 namespace ComicBookStorePrototype
 {
     internal static class Program
@@ -11,7 +13,7 @@ namespace ComicBookStorePrototype
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new ComicsForm());
+            Application.Run(new ComicsForm((new CSVDataLoader())));
         }
     }
 }
